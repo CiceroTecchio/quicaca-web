@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,25 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/login','UserController@login');
+
+
+Route::get('/data', function () {
+    return Carbon::now();
+});
+
+Route::resource('/leitura','ArduinoController');
+
+Route::group(['prefix' => '/', 'middleware' => 'auth:api'], function () {
+
+    Route::resource('/equipamento','EquipamentoController');
+
+    Route::put('/solenoide/{id}','ArduinoController@update');
+
+});
+
+Route::resource('/solenoide','ArduinoController');
+
+
+Route::get('/status/solenoide/{id}','ArduinoController@status');
